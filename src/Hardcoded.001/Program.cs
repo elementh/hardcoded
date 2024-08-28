@@ -26,7 +26,7 @@ using (var scope = app.Services.CreateScope())
     await bot.SetWebhookAsync($"{baseUrl}/bot");
 }
 
-app.MapPost("/bot", async (TelegramBotClient bot, Update update) =>
+app.MapPost("/bot", async (Update update) =>
 {
     if (update.Message is not null)
     {
