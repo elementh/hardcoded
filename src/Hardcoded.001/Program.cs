@@ -1,3 +1,5 @@
+using System.Threading.Channels;
+using Hardcoded._001;
 using Microsoft.AspNetCore.Http.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -12,6 +14,9 @@ builder.Services.ConfigureTelegramBot<JsonOptions>(opt => opt.SerializerOptions)
 builder.Services.AddHttpClient("bot")
     .RemoveAllLoggers()
     .AddTypedClient(httpClient => new TelegramBotClient(token, httpClient));
+
+builder.Services.AddSingleton(Channel.CreateUnbounded<Update>());
+builder.Services.AddHostedService<UpdateHandlerHostedService>();
 
 var app = builder.Build();
 
