@@ -16,16 +16,17 @@ public sealed class UpdateHandlerHostedService : BackgroundService
     {
         while (await _channel.Reader.WaitToReadAsync(stoppingToken))
         {
-            while (_channel.Reader.TryRead(out var update))
+            if (_channel.Reader.TryRead(out var update))
             {
-                await ExpensiveOperation();
+                await ExpensiveOperation(update);
             }
         }
     }
     
-    private async Task ExpensiveOperation()
+    private async Task ExpensiveOperation(Update update)
     {
+        Console.WriteLine("Starting hard work... {0}", update.Id);
         await Task.Delay(5000);
-        Console.WriteLine("Hard work done!");
+        Console.WriteLine("Hard work done! {0}", update.Id);
     }
 }

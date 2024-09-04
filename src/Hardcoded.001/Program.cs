@@ -26,12 +26,12 @@ using (var scope = app.Services.CreateScope())
     await bot.SetWebhookAsync($"{baseUrl}/bot");
 }
 
-app.MapPost("/bot", async (Update update) =>
+app.MapPost("/bot", async (Channel<Update> channel, Update update) =>
 {
     if (update.Message is not null)
     {
-        Console.WriteLine("Update received!");
-        await ExpensiveOperation();
+        Console.WriteLine("Update received! {0}", update.Id);
+        await channel.Writer.WriteAsync(update);
     }
 });
 
