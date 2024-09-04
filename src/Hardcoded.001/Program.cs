@@ -16,7 +16,9 @@ builder.Services.AddHttpClient("bot")
     .AddTypedClient(httpClient => new TelegramBotClient(token, httpClient));
 
 builder.Services.AddSingleton(Channel.CreateUnbounded<Update>());
-builder.Services.AddHostedService<UpdateHandlerHostedService>();
+builder.Services.AddSingleton<IHostedService, UpdateHandlerHostedService>();
+builder.Services.AddSingleton<IHostedService, UpdateHandlerHostedService>();
+builder.Services.AddSingleton<IHostedService, UpdateHandlerHostedService>();
 
 var app = builder.Build();
 
@@ -35,11 +37,4 @@ app.MapPost("/bot", async (Channel<Update> channel, Update update) =>
     }
 });
 
-async Task ExpensiveOperation()
-{
-    await Task.Delay(5000);
-    Console.WriteLine("Hard work done!");
-}
-
 app.Run();
-
